@@ -21,7 +21,7 @@ export default class App extends React.Component {
 
     snap = async () => {
         if (this.camera) {
-            let photo = await this.camera.takePictureAsync({base64: true, quality: 0, exif: true});
+            let photo = await this.camera.takePictureAsync({base64: true, quality: 0.5, exif: true});
             console.log(photo);
             this.setState({image: photo});
             // getPixelRGBA(image, 0, 0)
@@ -49,7 +49,7 @@ export default class App extends React.Component {
         } else {
             return (
                 <View style={{ flex: 1 }}>
-                    {this.state.image === null &&
+                    {this.state.image !== null &&
                     <Camera ref={ref => {this.camera = ref; }} style={{ flex: 1 }}
                             type={this.state.type}
                             options={{base64: true, quality: 0.5, exif: true}}
@@ -91,14 +91,14 @@ export default class App extends React.Component {
                         style={{ flex: 1 }}
                         onComplete={() => console.log("COMPLETE")}
                         completeButtonText={'Return Home'}
-                        uri={'http://www.hochmuth.com/mp3/Haydn_Cello_Concerto_D-1.mp3'}
+                        uri={'http://www.slspencer.com/Sounds/Chewbacca/Chewie3.mp3'}
                         showTimeStamp={true}
                         showDebug={true}
                     />
                     {this.state.image === null && <Button onPress={this.snap} title={"Snap"}/>}
                     {this.state.image !== null && <Button onPress={this.resetImage} title={"Back To Camera"}/>}
                     {this.state.image !== null && <Image
-                        style={{width: 500, height: 500}}
+                        style={{width: 50, height: 50}}
                         source={{uri: this.state.image.uri}}
                     />}
                 </View>
