@@ -9,11 +9,13 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/vector-icons": "^8.0.0",
     "expo": "^30.0.1",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-audio-player-recorder-no-linking": "^0.1.2",
     "react-native-barcodescanner": "^3.1.1",
+    "react-native-elements": "^0.19.1",
     "react-native-get-pixel": "0.0.5",
     "react-native-pixel-color": "0.0.2",
     "react-native-sound": "^0.10.9",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Button, Image } from 'react-native';
+import {Text, View, TouchableOpacity, Button, Image, StyleSheet} from 'react-native';
 import { Camera, Permissions, FaceDetector, Audio } from 'expo';
 import { getPixelRGBA } from 'react-native-get-pixel';
 import {Player} from 'react-native-audio-player-recorder-no-linking';
@@ -120,7 +120,7 @@ export default class App extends React.Component {
     // }
 
     render() {
-        return <TabNavigation/>
+        return <View style={styles.baby}><TabNavigation/></View>
         // const { hasCameraPermission } = this.state;
         // if (hasCameraPermission === null) {
         //     return <View />;
@@ -178,3 +178,10 @@ export default class App extends React.Component {
         // }
     }
 }
+
+const styles = StyleSheet.create({
+    baby: {
+        flex: 1,
+        marginTop: -80
+    },
+})

@@ -1,23 +1,29 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Button, Text, View, Image } from 'react-native';
+import { StyleSheet, Dimensions, Button, Text, View, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // 6.2.2
 import {
     createBottomTabNavigator,
     createStackNavigator,
+    TabBarBottom
 } from 'react-navigation';
 import CameraScreen from '../CameraScreen';
+import SongHolder from './SongHolder';
+import { Card, ListItem } from 'react-native-elements';
+
 
 class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.baby}>
-                {/* other code from before here */}
-                <Text>Home</Text>
-                <Image style={styles.stretch} source={require('../assets/splash.png')} />
-                <Button
-                    title="Let's Get Started!"
-                    onPress={() => this.props.navigation.navigate('Camera')}
-                />
+                <StatusBar barStyle="light-content" />
+                <Image style={styles.image} source={require('../assets/logo.png')} />
+                <View style={styles.buttonBorder}>
+                    <TouchableOpacity style={styles.button}>
+                        <Button title="Let's Get Started!"  color="#336699"
+                                onPress={() => this.props.navigation.navigate('Play')}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -25,14 +31,23 @@ class HomeScreen extends React.Component {
 
 class SettingsScreen extends React.Component {
     render() {
+        var users = ["1", "2", "3", "4"];
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Settings</Text>
+            <View style={styles.recordings}>
+                <Text style={{marginTop: '15%', fontSize: 20, textAlign: 'center', color: 'white', fontWeight: 'bold'}}>My Songs</Text>
                 {/* other code from before here */}
-                <Button
-                    title="Go to Home"
-                    onPress={() => this.props.navigation.navigate('Home')}
-                />
+                {users.map((user, i) => {
+                    return <ListItem key={i} title={"Recording " + user}/>
+                })}
+                <View style={styles.buttonBorder}>
+                    <TouchableOpacity style={styles.button}>
+                        <Button
+                            title="Play Current Recording" color="#336699"
+                            onPress={() => SongHolder.playNotes()}
+                        />
+                    </TouchableOpacity>
+                </View>
+
             </View>
         );
     }
@@ -43,20 +58,40 @@ const HomeStack = createStackNavigator({
 });
 
 const SettingsStack = createStackNavigator({
-    RecordedSongs: SettingsScreen
+    Songs: SettingsScreen
 });
 
-const CameraStack = createStackNavigator({
-    Camera: CameraScreen,
+const PlayStack = createStackNavigator({
+    Play: CameraScreen,
 });
 export default createBottomTabNavigator(
     {
         Home: HomeStack,
-        RecordedSongs: SettingsStack,
-        Camera: CameraStack
+        Songs: SettingsStack,
+        Play: PlayStack
     },
     {
-        /* Other configuration remains unchanged */
+        navigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ focused, tintColor }) => {
+                const { routeName } = navigation.state;
+                let iconName;
+                if (routeName === 'Home') {
+                    iconName = 'ios-home';
+                } else if (routeName === 'Songs') {
+                    iconName = 'ios-archive';
+                } else if (routeName === 'Play'){
+                    iconName = 'ios-musical-notes';
+                }
+                return <Ionicons name={iconName} size={25} color={tintColor} />;
+            },
+        }),
+        tabBarPosition: 'bottom',
+        tabBarOptions: {
+            activeTintColor: '#336699',
+            inactiveTintColor: 'gray',
+        },
+        animationEnabled: true,
+        swipeEnabled: true,
     }
 );
 
@@ -65,11 +100,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    stretch: {
-        width: 100,
-        height: 100
+    image: {
+        marginTop: '15%',
+        width: '100%',
+        height: '70%'
     },
     buttonBorder: {
+        paddingTop: 30,
         paddingLeft: 50,
         paddingRight: 50,
         paddingBottom: 10
@@ -89,11 +126,17 @@ const styles = StyleSheet.create({
     },
     baby: {
         flex: 1,
-        backgroundColor: '#ecf0f1'
+        backgroundColor: '#38b6ff',
+        width: '100%',
+        height: '100%'
+    },
+    recordings: {
+        flex: 1,
+        backgroundColor: '#38b6ff',
+        width: '100%',
+        height: '90%'
     },
     header: {
-        paddingTop: 100,
-        padding: 20,
         backgroundColor: '#336699',
     },
     form: {
