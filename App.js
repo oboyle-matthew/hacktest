@@ -38,6 +38,39 @@ export default class App extends React.Component {
         this.setState({
             image: null
         })
+    };
+
+    handlePlay = async (faceData) => {
+
+        // var totalFaces = 8;
+        // console.log(faceData.faces.length);
+
+        const soundObject = new Expo.Audio.Sound();
+        if (faceData.faces.length > 1) {
+            try {
+                console.log("YES");
+                // var num = faceData.faces[0].faceID;
+                await soundObject.loadAsync(require('./sounds/test1.mp3'));
+
+                // (num % 2 === 0) ? await soundObject.loadAsync(require('./sounds/test0.wav')) : await soundObject.loadAsync(require('./sounds/test1.mp3'));
+
+                { shouldPlay: true }
+
+                this.audioPlayer6  = soundObject;
+
+                this.audioPlayer6.playAsync();
+
+                this.audioPlayer6.setPositionAsync(0);
+
+                // this.audioPlayer6.setRateAsync(num*4, false);
+
+                // Your sound is playing!
+
+            } catch (error) {
+                console.log(error);
+                // An error occurred!
+            }
+        }
     }
 
     render() {
@@ -53,7 +86,7 @@ export default class App extends React.Component {
                     <Camera ref={ref => {this.camera = ref; }} style={{ flex: 1 }}
                             type={this.state.type}
                             options={{base64: true, quality: 0.5, exif: true}}
-                            onFacesDetected={a => this.test(a)}
+                            onFacesDetected={a => this.handlePlay(a)}
                             faceDetectorSettings={{
                                 mode: FaceDetector.Constants.Mode.fast,
                                 detectLandmarks: FaceDetector.Constants.Mode.none,
@@ -87,14 +120,22 @@ export default class App extends React.Component {
                             </TouchableOpacity>
                         </View>
                     </Camera>}
-                    <Player
-                        style={{ flex: 1 }}
-                        onComplete={() => console.log("COMPLETE")}
-                        completeButtonText={'Return Home'}
-                        uri={'http://www.hochmuth.com/mp3/Haydn_Cello_Concerto_D-1.mp3'}
-                        showTimeStamp={true}
-                        showDebug={true}
-                    />
+                    {/*<Player*/}
+                        {/*style={{ flex: 1 }}*/}
+                        {/*onComplete={() => console.log("COMPLETE")}*/}
+                        {/*completeButtonText={'Return Home'}*/}
+                        {/*uri={'http://www.hochmuth.com/mp3/Haydn_Cello_Concerto_D-1.mp3'}*/}
+                        {/*showTimeStamp={true}*/}
+                        {/*showDebug={true}*/}
+                    {/*/>*/}
+                    {/*<Player*/}
+                        {/*style={{ flex: 1 }}*/}
+                        {/*onComplete={() => console.log("COMPLETE")}*/}
+                        {/*completeButtonText={'Return Home'}*/}
+                        {/*uri={'https://www.word.today/uploads/word/pronunciation_audio/727/consistent.mp3'}*/}
+                        {/*showTimeStamp={true}*/}
+                        {/*showDebug={true}*/}
+                    {/*/>*/}
                     {this.state.image === null && <Button onPress={this.snap} title={"Snap"}/>}
                     {this.state.image !== null && <Button onPress={this.resetImage} title={"Back To Camera"}/>}
                     {this.state.image !== null && <Image
