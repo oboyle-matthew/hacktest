@@ -7,6 +7,7 @@ import {Player} from 'react-native-audio-player-recorder-no-linking';
 // import image from "./assets/splash.png";
 
 var faceLocations = [];
+var currSounds =['./sounds/test0.wav', './sounds/test1.mp3', './sounds/test0.wav', './sounds/test1.mp3'];
 
 export default class App extends React.Component {
     state = {
@@ -42,14 +43,39 @@ export default class App extends React.Component {
         })
     };
 
-    playSound = async (note) => {
+    async playSound(note) {
+        try {
+            console.log(note);
+            const soundObject = new Expo.Audio.Sound();
+            if (note === 0) {
+                await soundObject.loadAsync(require('./sounds/c3.mp3'));
+            } else if (note === 1) {
+                await soundObject.loadAsync(require('./sounds/d3.mp3'));
+            } else if (note === 2) {
+                await soundObject.loadAsync(require('./sounds/e3.mp3'));
+            } else if (note === 3) {
+                await soundObject.loadAsync(require('./sounds/f3.mp3'));
+            } else {
+                await soundObject.loadAsync(require('./sounds/g3.mp3'));
+            }
+            { shouldPlay: true }
+
+            this.audioPlayer6  = soundObject;
+
+            this.audioPlayer6.playAsync();
+
+            this.audioPlayer6.setPositionAsync(0);
+            playSound(note)
+        } catch(err) {
+            console.log(err);
+        }
+
 
     }
 
     handlePlay = async (faceData) => {
 
         var num = 5;
-        const soundObject = new Expo.Audio.Sound();
         // console.log(faceData.faces.length);
         if (this.state.faces === num) {
             if (faceData.faces.length === num) {
@@ -57,7 +83,7 @@ export default class App extends React.Component {
             }
             if (faceData.faces.length < num) {
                 try {
-                    faceLocations.forEach((location, index) => {
+                    faceLocations.forEach(location => {
                         if (faceData.faces.filter(face => {
                             return Math.abs(location.x - face.bounds.origin.x) <= 5
                         }).length === 0) {
@@ -67,33 +93,16 @@ export default class App extends React.Component {
                                     numSmaller += 1;
                                 }
                             });
-                            console.log(numSmaller);
+                            this.playSound(numSmaller);
                         }
                     });
                     faceLocations = [];
                     this.setState({
                         faces: faceData.faces.length
                     });
-                    // var num = faceData.faces[0].faceID;
-                    await soundObject.loadAsync(require('./sounds/test1.mp3'));
-
-                    // (num % 2 === 0) ? await soundObject.loadAsync(require('./sounds/test0.wav')) : await soundObject.loadAsync(require('./sounds/test1.mp3'));
-
-                    { shouldPlay: true }
-
-                    this.audioPlayer6  = soundObject;
-
-                    this.audioPlayer6.playAsync();
-
-                    this.audioPlayer6.setPositionAsync(0);
-
-                    // this.audioPlayer6.setRateAsync(num*4, false);
-
-                    // Your sound is playing!
 
                 } catch (error) {
                     console.log(error);
-                    // An error occurred!
                 }
             } else {
 
